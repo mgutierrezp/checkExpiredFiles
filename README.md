@@ -94,3 +94,4 @@ COPYING
 CHANGELOG
 
 	v1.0 - 2014/03/17 - first version. Bugs will come soon :-)
+	v1.1 - 2014/03/26 - bug fix

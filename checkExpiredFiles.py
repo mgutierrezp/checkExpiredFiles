@@ -324,19 +324,19 @@ def applyChanges(filesDict):
 	
 	print("Applying changes...")
 
-	print("Removing expired files from filesystem... ",end="")
+	print("Removing expired files from filesystem (if any)... ",end="")
 	try:
-		for file in filesDict:
-			if filesDict[file]["status"]=="expired":
+		for ffile in filesDict:
+			if filesDict[ffile]["status"]=="expired":
 				# file has expired
-				fileToDeleteFull=os.path.join(DIRTOSCAN,file)
-				fileToDeleteRelative=file
+				fileToDeleteFull=os.path.join(DIRTOSCAN,ffile)
+				fileToDeleteRelative=ffile
 				if not os.path.exists(fileToDeleteFull) and not os.path.islink(fileToDeleteFull):
-					_error("File does not exists anymore, skipping: "+fileToRelative)
-					break
+					_error("File does not exists anymore, skipping: "+fileToDeleteRelative)
+					continue
 				if os.path.isdir(fileToDeleteFull) and os.listdir(fileToDeleteFull) and not os.path.islink(fileToDeleteFull):
 					# but is a non-empty directory, so skip it!
-					break
+					continue
 				if os.path.islink(fileToDeleteFull) or os.path.isfile(fileToDeleteFull):
 					# it's a regular file or symlink, so delete it. In case of symlink, removes only the link
 					# also removes the parent(s) directories if empty and expired
@@ -347,11 +347,11 @@ def applyChanges(filesDict):
 							# remove empty and expired directory
 							os.rmdir(os.path.join(DIRTOSCAN,aux))
 						aux=os.path.dirname(aux)
-					break
+					continue
 				if os.path.isdir(fileToDeleteFull) and not os.listdir(fileToDeleteFull):
 					# delete empty directory
 					os.rmdir(fileToDeleteFull)
-					break
+					continue
 
 				print(" -- unknown file type! skipping '"+fileToDelete+"'")
 	except Exception:
